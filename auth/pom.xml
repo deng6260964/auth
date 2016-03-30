@@ -76,7 +76,11 @@
               <!--设置自动提交事务-->
               <autocommit>true</autocommit>
               <srcFiles>
-                <srcFile>src/main/resources/sql/auth_user.sql</srcFile>
+                <srcFile>src/main/resources/sql/t_user.sql</srcFile>
+                <srcFile>src/main/resources/sql/t_resources.sql</srcFile>
+                <srcFile>src/main/resources/sql/t_role.sql</srcFile>
+                <srcFile>src/main/resources/sql/t_role_resources.sql</srcFile>
+                <srcFile>src/main/resources/sql/t_user_role.sql</srcFile>
               </srcFiles>
             </configuration>
           </execution>
