@@ -21,32 +21,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
   <name>auth</name>
-  <groupId>com.auth</groupId>
-  <artifactId>auth</artifactId>
+  <groupId>com.bdz</groupId>
+  <artifactId>baseframework</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <modules>
-    <module>../baseframework</module>
-  </modules>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>maven-jetty-plugin</artifactId>
-        <version>6.1.7</version>
-        <configuration>
-          <connectors>
-            <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-              <port>8888</port>
-              <maxIdleTime>30000</maxIdleTime>
-            </connector>
-          </connectors>
-          <!--<webAppSourceDirectory>${project.build.directory}/${pom.artifactId}-${pom.version}</webAppSourceDirectory>-->
-          <contextPath>/</contextPath>
-        </configuration>
-      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>
@@ -56,47 +38,14 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
-      <!--<plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sql-maven-plugin</artifactId>
-        <version>1.5</version>
-        &lt;!&ndash;-因为该实例中用到的数据库是mysql,故需依赖于mysql连接驱动&ndash;&gt;
-        <dependencies>
-          <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.27</version>
-          </dependency>
-        </dependencies>
-        &lt;!&ndash;为该插件配置数据库连接信息&ndash;&gt;
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <driver>com.mysql.jdbc.Driver</driver>
-          <url>jdbc:mysql://localhost:3306</url>
-          <username>auth</username>
-          <password>auth</password>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
-        <executions>
-          &lt;!&ndash;创建user用户表&ndash;&gt;
-          <execution>
-            <id>create-table-user</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              &lt;!&ndash;设置自动提交事务&ndash;&gt;
-              <autocommit>false</autocommit>
-              <srcFiles>
-                <srcFile>src/main/resources/sql/auth_user.sql</srcFile>
-                <srcFile>src/main/resources/sql/auth_resources.sql</srcFile>
-                <srcFile>src/main/resources/sql/auth_role.sql</srcFile>
-                <srcFile>src/main/resources/sql/auth_role_resources.sql</srcFile>
-                <srcFile>src/main/resources/sql/auth_user_role.sql</srcFile>
-              </srcFiles>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>-->
+      </plugin>
     </plugins>
   </build>
   <!-- 各jar依赖版本-->
@@ -105,12 +54,13 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <spring.version>5.0.0.RELEASE</spring.version>
+    <jdk.version>1.8</jdk.version>
     <log4j.version>1.2.17</log4j.version>
     <slf4j-log4j.version>1.7.12</slf4j-log4j.version>
     <junit.version>4.12</junit.version>
     <commons-io.version>2.4</commons-io.version>
     <commons-lang.verison>3.4</commons-lang.verison>
-    <hibernate.version>5.2.11.Final</hibernate.version>
+    <hibernate.version>5.1.0.Final</hibernate.version>
     <javax.servlet.version>3.0.1</javax.servlet.version>
     <mysql.version>5.1.38</mysql.version>
     <commons-dbcp.version>1.4</commons-dbcp.version>
@@ -118,10 +68,9 @@
     <commons-fileupload.version>1.3.1</commons-fileupload.version>
     <jsp-api.version>2.2</jsp-api.version>
     <ant.version>1.9.6</ant.version>
-    <spring-security.version>5.0.0.RELEASE</spring-security.version>
-    <guava.version>23.5-jre</guava.version>
-    <java.version>1.8</java.version>
     <spring-jpa.version>2.0.2.RELEASE</spring-jpa.version>
+    <guava.version>24.0-jre</guava.version>
+    <lombok.version>1.16.20</lombok.version>
   </properties>
 
   <dependencies>
@@ -130,28 +79,6 @@
       <artifactId>[the artifact id of the block to be mounted]</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency-->
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>taglibs</groupId>
-      <artifactId>standard</artifactId>
-      <version>1.1.2</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-    <version>${javax.servlet.version}</version>
-    <scope>provided</scope>
-    </dependency>
-
     <!--spring的依赖jar-->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -177,7 +104,12 @@
       <version>${spring.version}</version>
       <type>jar</type>
     </dependency>
-
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>${spring.version}</version>
+      <type>jar</type>
+    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aspects</artifactId>
@@ -249,10 +181,11 @@
       <artifactId>ant</artifactId>
       <version>${ant.version}</version>
     </dependency>
+
     <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-      <version>${spring-security.version}</version>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>${spring-jpa.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
     <dependency>
@@ -260,28 +193,14 @@
       <artifactId>guava</artifactId>
       <version>${guava.version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.bdz</groupId>
-      <artifactId>baseframework</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-jpa</artifactId>
-      <version>${spring-jpa.version}</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api -->
-    <dependency>
-      <groupId>org.hibernate.javax.persistence</groupId>
-      <artifactId>hibernate-jpa-2.1-api</artifactId>
-      <version>1.0.0.Final</version>
-    </dependency>
 
 
   </dependencies>
